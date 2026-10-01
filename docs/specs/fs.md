@@ -250,7 +250,7 @@ For the Hash-and-Expand instantiation, copying the state is a copy of the increm
 
 Duplicating transcript state is not expressible in terms of absorb and squeeze alone, so an instantiation **MUST** provide it.
 
-Because a transcript may cache a derived challenge stream (the `FsPrf` held by the `Transcript` structure above), copying the state may copy that cache. Absorbing `label` **MUST** invalidate it, exactly as any other absorbed message does: a fork that inherited a live keystream from `t` would reproduce the parent's challenges instead of its own. Absorbing `label` through the ordinary absorb path gives this for free -- in the `Transcript` structure above, `write_untyped` clears `pseudorandom_generator`.
+When a transcript is forked, any cached stream of challenges **MUST** be invalidated, as with any other invocation of `write_bytes`.
 
 A mechanism outside this section **MAY** bind values shared across the sub-proofs by squeezing a challenge from the parent transcript `t`. Such a challenge **MUST** be squeezed after step 2 and before `t` is forked in step 3, so that every fork copies the same state of `t`.
 
